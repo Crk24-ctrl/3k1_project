@@ -4,29 +4,26 @@ use IEEE.numeric_std.all;
 
 entity datapath_3k1 is
   port(
-    reset        : in  std_logic; -- async
+    reset        : in  std_logic; 
     clk          : in  std_logic;
 
-    -- control
     reset_number : in  std_logic;
     inc_number   : in  std_logic;
 
-    load_term    : in  std_logic;  -- TERM <= NUMBER
-    shift_term   : in  std_logic;  -- TERM <= TERM/2
-    multadd_term : in  std_logic;  -- TERM <= 3*TERM + 1
+    load_term    : in  std_logic;  
+    shift_term   : in  std_logic; 
+    multadd_term : in  std_logic; 
 
-    reset_length : in  std_logic;  -- LENGTH <= 1
-    inc_length   : in  std_logic;  -- LENGTH++
+    reset_length : in  std_logic; 
+    inc_length   : in  std_logic; 
 
-    load_done    : in  std_logic;  -- DONE <= 1
-
-    -- status
+    load_done    : in  std_logic;  
+    
     term_is_one  : out std_logic;
     term_is_even : out std_logic;
     length_ge_9  : out std_logic;
     done_status  : out std_logic;
 
-    -- observable regs
     number_q     : out unsigned(6 downto 0);
     term_q       : out unsigned(6 downto 0)
   );
@@ -39,7 +36,6 @@ architecture rtl of datapath_3k1 is
   signal done_r   : std_logic;
 begin
 
-  -- NUMBER
   process(clk, reset)
   begin
     if reset = '1' then
@@ -53,7 +49,7 @@ begin
     end if;
   end process;
 
-  -- TERM
+
   process(clk, reset)
   begin
     if reset = '1' then
@@ -71,7 +67,6 @@ begin
     end if;
   end process;
 
-  -- LENGTH (only needs to reach 9)
   process(clk, reset)
   begin
     if reset = '1' then
@@ -87,7 +82,7 @@ begin
     end if;
   end process;
 
-  -- DONE
+
   process(clk, reset)
   begin
     if reset = '1' then
@@ -99,7 +94,7 @@ begin
     end if;
   end process;
 
-  -- status
+
   term_is_one  <= '1' when term_r = to_unsigned(1, 7) else '0';
   term_is_even <= '1' when term_r(0) = '0' else '0';
   length_ge_9  <= '1' when length_r >= to_unsigned(9, 4) else '0';
