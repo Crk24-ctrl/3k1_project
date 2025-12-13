@@ -4,7 +4,7 @@ use IEEE.numeric_std.all;
 
 entity three_k_plus_one is
   port(
-    reset      : in  std_logic; -- asynch
+    reset      : in  std_logic; 
     clk        : in  std_logic;
     number_out : out unsigned(6 downto 0);
     term_out   : out unsigned(6 downto 0);
@@ -33,30 +33,28 @@ begin
 
     elsif rising_edge(clk) then
       if done_r = '1' then
-        null; -- freeze
+        null; 
 
       else
-        -- If term reached 1: either done (if length>=9) or move to next number
         if term_r = to_unsigned(1, 7) then
           if length_r >= to_unsigned(9, 4) then
             done_r <= '1';
           else
             number_r <= number_r + 1;
-            term_r   <= number_r + 1;       -- load new term = new number
-            length_r <= to_unsigned(1, 4);  -- reset length
+            term_r   <= number_r + 1;       
+            length_r <= to_unsigned(1, 4);  
           end if;
 
         else
-          -- Generate next term (one per clock)
+          
           if term_r(0) = '0' then
-            -- even: divide by 2 (shift right)
+            
             term_r <= shift_right(term_r, 1);
           else
-            -- odd: 3*term + 1 (resize to 7 bits)
+            
             term_r <= resize((term_r * 3) + 1, 7);
           end if;
 
-          -- increment length each time we generate a new term
           length_r <= length_r + 1;
         end if;
       end if;
