@@ -3,16 +3,14 @@ use IEEE.std_logic_1164.all;
 
 entity control_3k1 is
   port(
-    reset        : in  std_logic; -- async
+    reset        : in  std_logic; 
     clk          : in  std_logic;
 
-    -- status in
     term_is_one  : in  std_logic;
     term_is_even : in  std_logic;
     length_ge_9  : in  std_logic;
     done_status  : in  std_logic;
 
-    -- control out
     reset_number : out std_logic;
     inc_number   : out std_logic;
 
@@ -30,12 +28,12 @@ end control_3k1;
 architecture rtl of control_3k1 is
   type state_t is (
     S_RESET,
-    S_LOAD_NEW,      -- TERM<=NUMBER, LENGTH<=1
-    S_TEST,          -- decide next action
-    S_EVEN_SHIFT,    -- TERM<=TERM/2
-    S_ODD_MULTADD,   -- TERM<=3*TERM+1
-    S_INC_LENGTH,    -- LENGTH++
-    S_CHECK,         -- if term==1 and length>=9 => done else increment number
+    S_LOAD_NEW,      
+    S_TEST,          
+    S_EVEN_SHIFT,    
+    S_ODD_MULTADD,   
+    S_INC_LENGTH, 
+    S_CHECK,       
     S_INC_NUMBER,
     S_DONE
   );
@@ -91,7 +89,6 @@ begin
 
   process(state)
   begin
-    -- defaults
     reset_number <= '0';
     inc_number   <= '0';
     load_term    <= '0';
